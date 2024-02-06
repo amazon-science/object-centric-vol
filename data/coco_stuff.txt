@@ -1,0 +1,86 @@
+banner
+blanket
+branch
+bridge
+building
+bush
+cabinet
+cage
+cardboard
+carpet
+ceiling
+tile ceiling
+cloth
+clothes
+clouds
+counter
+cupboard
+curtain
+desk
+dirt
+door
+fence
+marble floor
+stone floor
+tile floor
+wood floor
+flower
+fog
+food
+fruit
+furniture
+grass
+gravel
+ground
+hill
+house
+leaves
+light
+mat
+metal
+mirror
+moss
+mountain
+mud
+napkin
+net
+paper
+pavement
+pillow
+plant
+plastic
+platform
+playingfield
+river
+road
+rock
+roof
+rug
+salad
+sand
+sea
+shelf
+sky
+skyscraper
+snow
+solid
+stairs
+stone
+straw
+table
+tent
+textile
+towel
+tree
+vegetable
+brick wall
+concrete wall
+panel wall
+stone wall
+tile wall
+wood wall
+water
+waterdrops
+blind window
+window
+wood

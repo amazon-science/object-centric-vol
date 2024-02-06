@@ -1,0 +1,3 @@
+python ./GitLab/resize_family/resize_short_bar_resize_patch.py /home/ubuntu/ILSVRC/Data/VID/snippets/test /home/ubuntu/ILSVRC/Data/VID/Processed_video/test  --dense --level 1 --ext mp4 --to-mp4 --scale 224 --num-worker 1
+python ./GitLab/resize_family/resize_short_bar_resize_patch.py /home/ubuntu/ILSVRC/Data/VID/snippets/val /home/ubuntu/ILSVRC/Data/VID/Processed_video/val  --dense --level 1 --ext mp4 --to-mp4 --scale 224 --num-worker 1
+python ./GitLab/resize_family/resize_short_bar_resize_patch.py /home/ubuntu/ILSVRC/Data/VID/snippets/train /home/ubuntu/ILSVRC/Data/VID/Processed_video/train  --dense --level 2 --ext mp4 --to-mp4 --scale 224 --num-worker 1
