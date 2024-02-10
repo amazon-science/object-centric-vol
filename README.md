@@ -14,11 +14,15 @@ We propose an unsupervised video object localization method that first localizes
 This codebase is tested under PyTorch 1.11.0. You can config your PyTorch according to your machine and CUDA.
 
 ```
+git clone git@github.com:amazon-science/object-centric-vol.git
+cd object-centric-vol
 conda create --name OV-VOL -y python=3.9
 source activate OV-VOL
 conda install ipython pip
 conda install pytorch=1.11.0 torchvision cudatoolkit=10.0 -c pytorch
 pip install -r requirements.txt
+git clone git@github.com:MCG-NJU/VideoMAE.git
+DS_BUILD_OPS=1 pip install deepspeed
 ```
 
 ## Data Preparation
@@ -80,10 +84,37 @@ Finally run the following code to generate the csv file for training the slot at
 ```
 python generate_csv.py
 ```
+Or you can download the generated list [here]()
 ## Training and Evaluation
+### Pretraining the VideoMAE
+```bash
+YOUR_PATH=data_ckpt_logs
+OUTPUT_DIR=${YOUR_PATH}/ckpt/pretrain-backbones
+DATA_PATH=path-to-the-pretraining-video-list
+
+OMP_NUM_THREADS=1 python -m torch.distributed.launch --nproc_per_node=8 \
+        --master_port 12320 --nnodes=16 --node_rank=number-of-rank --master_addr=master-ip-addr \
+        /home/ubuntu/GitLab/Object-Centric-VOL/run_mae_pretraining_single_frame.py \
+        --data_path ${DATA_PATH} \
+        --mask_type tube \
+        --mask_ratio 0.9 \
+        --model pretrain_videomae_base_patch16_224 \
+        --decoder_depth 4 \
+        --batch_size 4 \
+        --num_frames 16 \
+        --sampling_rate 2 \
+        --opt adamw \
+        --opt_betas 0.9 0.95 \
+        --warmup_epochs 40 \
+        --save_ckpt_freq 20 \
+        --epochs 2401 \
+        --log_dir ${OUTPUT_DIR} \
+        --output_dir ${OUTPUT_DIR}
+```
+
 ### Training the patch-based CLIP
 run the following codes to train the patch-based CLIP
-```
+```bash
 python train.py --dist-url 'tcp://IP_OF_NODE0:FREEPORT' \
   --dist-backend 'nccl' \
   --multiprocessing-distributed \
@@ -94,31 +125,26 @@ python train.py --dist-url 'tcp://IP_OF_NODE0:FREEPORT' \
   --lr 1.0 \
   --batch-size 4096
 ```
+
 ### Train the slot attention grouping model on ImageNet-VID dataset
-Please first download the [pretrained VideoMAE]() and place the weight in 
-```
-code_root/
-└── data_ckpt_logs/
-    └── ckpt
-        └── patch_based_clip.pth.tar
-```
-Then run the following codes
-```
+Then run the following codes to train the slot attention grouping after self-supervised pretraining
+```bash
 torchrun --nnodes=4 --node_rank 0 --master_addr ip-of-your-first-machine \
---master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py
+--master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py --pretrained_checkpint path-to-pretrained-backbone-checkpoint
 torchrun --nnodes=4 --node_rank 1 --master_addr ip-of-your-first-machine \
---master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py
+--master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py --pretrained_checkpint path-to-pretrained-backbone-checkpoint
 torchrun --nnodes=4 --node_rank 2 --master_addr ip-of-your-first-machine \
---master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py
+--master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py --pretrained_checkpint path-to-pretrained-backbone-checkpoint
 torchrun --nnodes=4 --node_rank 3 --master_addr ip-of-your-first-machine \
---master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py
+--master_port 8899 --nproc_per_node=8 ./train_grouping_imagenet_vid.py --pretrained_checkpint path-to-pretrained-backbone-checkpoint
 ```
 
 ### Evaluation
-After you trained the slot attention grouping model and patch-based clip, please use the following codes to eval the model
-```
+After you trained the slot attention grouping model and patch-based clip, please use the following codes to eval the model:
+```bash
 torchrun --nnodes=1 --nproc_per_node=8 test_imagenet_vid.py \
-  --st_grouping_ckpt_path data_ckpt_logs/ckpt/checkpoint_Grouping_ImageNetVID_VideoMAE_15slots/mae_grouping_299.pth \
+  --st_grouping_ckpt_path --path-to-slot-attention-grouping-checkpoint \
+  --clip_pacl_ckpt_path path-to-patch-based-clip-checkpoint \
   --num_slots 15 --n_stmae_seeds 1 \
   --seed 287 \
   --output_folder evaluation_results/VideoMAE_STGrouping_15slots_8frames_299epoch
@@ -129,7 +155,7 @@ We will add the checkpoint soon.
 
 ## Citation
 If you find our paper useful for your research and applications, please cite using this BibTeX:
-```
+```bibtex
 @InProceedings{Fan_2023_ICCV,
     author    = {Fan, Ke and Bai, Zechen and Xiao, Tianjun and Zietlow, Dominik and Horn, Max and Zhao, Zixu and Simon-Gabriel, Carl-Johann and Shou, Mike Zheng and Locatello, Francesco and Schiele, Bernt and Brox, Thomas and Zhang, Zheng and Fu, Yanwei and He, Tong},
     title     = {Unsupervised Open-Vocabulary Object Localization in Videos},
