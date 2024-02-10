@@ -84,7 +84,7 @@ Finally run the following code to generate the csv file for training the slot at
 ```
 python generate_csv.py
 ```
-Or you can download the generated list [here]()
+Or you can download the generated list: [train list](https://data.dgl.ai/dataset/Object-Centric-VOL/train.csv) and  [val list](https://data.dgl.ai/dataset/Object-Centric-VOL/val.csv).
 ## Training and Evaluation
 ### Pretraining the VideoMAE
 ```bash
@@ -151,7 +151,7 @@ torchrun --nnodes=1 --nproc_per_node=8 test_imagenet_vid.py \
 ```
 
 ## Checkpoints
-We will add the checkpoint soon.
+Due to the license restrictions, we can only provide the checkpoint of [patch-based CLIP](https://data.dgl.ai/dataset/Object-Centric-VOL/patch_based_clip.pth.tar)
 
 ## Citation
 If you find our paper useful for your research and applications, please cite using this BibTeX:
