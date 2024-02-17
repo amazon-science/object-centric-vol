@@ -167,6 +167,9 @@ If you find our paper useful for your research and applications, please cite usi
 }
 ```
 
+## Acknowledgements
+Our code is based on [VideoMAE](https://github.com/MCG-NJU/VideoMAE), [CLIP](https://github.com/openai/CLIP), [mega](https://github.com/Scalsol/mega.pytorch) and [object-centric-learning-framework](https://github.com/amazon-science/object-centric-learning-framework) repositories. Thanks to the contributors of these great codebases.
+
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
