@@ -1,8 +1,9 @@
-# Unsupervised Open-Vocabulary Object Localization in Videos
+# Official PyTorch Implementation of Unsupervised Open-Vocabulary Object Localization in Videos
+[![ArXiv](https://img.shields.io/badge/ArXiv-2309.09858-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2309.09858)[![HomePage](https://img.shields.io/badge/HomePage-Visit-blue.svg?logo=homeadvisor&logoColor=f5f5f5)](https://kfan21.github.io/Object-Centric-VOL/)[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/amazon-science/object-centric-vol/blob/main/LICENSE) 
 
-This codebase is the official implementation of [Unsupervised Open-Vocabulary Object Localization in Videos](https://openaccess.thecvf.com/content/ICCV2023/html/Fan_Unsupervised_Open-Vocabulary_Object_Localization_in_Videos_ICCV_2023_paper.html).
+> [**Unsupervised Open-Vocabulary Object Localization in Videos**](https://arxiv.org/abs/2309.09858)<br>
+>  [Ke Fan](https://kfan21.github.io/)\*, [Zechen Bai](https://www.baizechen.site/)\*, [Tianjun Xiao](http://tianjunxiao.com/), [Dominik Zietlow](https://www.dominikzietlow.com/), [Max Horn](https://expectationmax.github.io/), [Zixu Zhao](https://zxzhaoeric.github.io/), [Carl-Johann Simon-Gabriel](https://las.inf.ethz.ch/people/carljohann-simongabriel), [Mike Zheng Shou](https://www.comp.nus.edu.sg/cs/people/mikeshou/), [Francesco Locatello](https://www.francescolocatello.com/), [Bernt Schiele](https://www.mpg.de/322861/informatics-schiele), [Thomas Brox](https://lmb.informatik.uni-freiburg.de/people/brox/index.en.html), [Zheng Zhang†](https://scholar.google.com/citations?hl=zh-CN&user=k0KiE4wAAAAJ), [Yanwei Fu†](http://yanweifu.github.io/), [Tong He](https://hetong007.github.io/)
 
-Arxiv Version:[Link](https://arxiv.org/abs/2309.09858)
 
 
 ## Introduction
@@ -26,9 +27,9 @@ DS_BUILD_OPS=1 pip install deepspeed
 ```
 
 ## Data Preparation
-Download ImageNet 2012 for training the patch-based CLIP and ILSVRC2015 VID dataset(ImageNet-VID) for video object localization.
+Download [ImageNet 2012](https://image-net.org/challenges/LSVRC/2012/index.php) for training the patch-based CLIP and [ILSVRC2015 VID dataset(ImageNet-VID)](https://image-net.org/challenges/LSVRC/2015/2015-downloads) for video object localization.
 
-After download and unzip the ImageNet-VID, you will get the folder with the following structures:
+After downloading and unzipping the ImageNet-VID, you will get the folder with the following structures:
 ```
 ILSVRC/
 ├── Annotations/
@@ -111,7 +112,7 @@ OMP_NUM_THREADS=1 python -m torch.distributed.launch --nproc_per_node=8 \
         --log_dir ${OUTPUT_DIR} \
         --output_dir ${OUTPUT_DIR}
 ```
-
+You can refer [VideoMAE](https://github.com/MCG-NJU/VideoMAE) for data pre-processing of the pretraining stage.
 ### Training the patch-based CLIP
 run the following codes to train the patch-based CLIP
 ```bash
